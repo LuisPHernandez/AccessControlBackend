@@ -1,0 +1,6 @@
+fastapi[standard]
+uvicorn
+pyjwt
+qrcode
+python-multipart
+cryptography
