@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr
 from authorization import create_token, verify_token
 from proximity import is_near_ble_beacon
