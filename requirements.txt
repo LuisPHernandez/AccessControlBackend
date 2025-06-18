@@ -4,3 +4,5 @@ pyjwt
 qrcode
 python-multipart
 cryptography
+bcrypt==3.2.2
+passlib
