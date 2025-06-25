@@ -1,10 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr
 from authorization import create_token, verify_token
+from gate_controller import send_open_message
 from proximity import is_near_ble_beacon
 from passlib.context import CryptContext
 
 app = FastAPI()
+IP_MICRO = "192.168.0.60"
 
 # Request Models
 class GateOpenRequest(BaseModel):
@@ -54,18 +56,19 @@ def login(request: SignupRequest):
 @app.post("/open_gate")
 async def open_gate(request: GateOpenRequest):
     try:
-        decoded = verify_token(request.token)
+        decoded = verify_token(request.token) 
 
-        user_id = decoded["email"]
-        exp_time = decoded["exp"]    
+        user_id = decoded["user_id"]
 
         if not is_near_ble_beacon(user_id):
-            raise HTTPException(status_code=403, detail="User not near gate")
+            raise HTTPException(status_code=403, detail="Usuario demasiado lejos de la puerta")
 
-        # TODO Send signal to microcontroller
-        print(f"Opening gate {request.gate_id} for user {user_id}")
+        await send_open_message(IP_MICRO)
 
         return {"user_id": user_id, "gate_id": request.gate_id}
 
+    except HTTPException:
+        raise  # Re-raise internal HTTP errors coming from verify_token()
     except Exception as e:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
+        print(f"Unexpected error in /open_gate: {e}")
+        raise HTTPException(status_code=500, detail="Error del servidor")
