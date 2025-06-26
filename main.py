@@ -43,7 +43,7 @@ def login(request: LoginRequest):
 
     # Check if a user exists with the given email
     cur.execute(
-        """SELECT 1 FROM "user" WHERE email = %s""",
+        """SELECT 1 FROM "user" WHERE email = %s;""",
         (email,)
         )
     if (not cur.fetchone()):
@@ -53,7 +53,7 @@ def login(request: LoginRequest):
     
     # Verify if the given password matches the stored password
     cur.execute(
-        """SELECT password FROM "user" WHERE email = %s""",
+        """SELECT password FROM "user" WHERE email = %s;""",
         (email,)
         )
     result = cur.fetchone()
