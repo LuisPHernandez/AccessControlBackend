@@ -1,15 +1,19 @@
 import jwt
+import os
+from dotenv import load_dotenv
 from jwt import ExpiredSignatureError, InvalidTokenError
 from fastapi import HTTPException
 from datetime import datetime, timedelta, timezone
 
+load_dotenv()
+
 ALGORITHM = "RS256"
 
 # Load RSA keys once at startup
-with open("keys/private.pem", "rb") as f:
+with open(os.getenv("PRIVATE_KEY_PATH"), "rb") as f:
     PRIVATE_KEY = f.read()
 
-with open("keys/public.pem", "rb") as f:
+with open(os.getenv("PUBLIC_KEY_PATH"), "rb") as f:
     PUBLIC_KEY = f.read()
 
 """
