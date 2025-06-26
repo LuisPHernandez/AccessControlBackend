@@ -60,9 +60,6 @@ async def open_gate(request: GateOpenRequest):
 
         user_id = decoded["user_id"]
 
-        if not is_near_ble_beacon(user_id):
-            raise HTTPException(status_code=403, detail="Usuario demasiado lejos de la puerta")
-
         await send_open_message(IP_MICRO)
 
         return {"user_id": user_id, "gate_id": request.gate_id}
