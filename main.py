@@ -3,11 +3,12 @@ from pydantic import BaseModel, EmailStr
 from authorization import create_token, verify_token
 from gate_controller import send_open_message
 from passlib.context import CryptContext
-from db import get_db_connection
+from db import get_db_connection, init_db
 
 # Global variables
 IP_MICRO = "192.168.0.60"
 
+init_db() # Initializes the database
 app = FastAPI()
 
 # Request Models
